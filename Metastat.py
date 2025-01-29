@@ -181,18 +181,18 @@ def embedder(file):
 
     return output_embedding_df, output_df
 
-def metastat(dataset, thesaurus = "thesaurus_embedding.csv", n = 3, threshold = 0.25):
+def metastat(dataset, thesaurus = "thesaurus_embedding.csv", n = 3, threshold = 0.25, cosineinc = False):
     '''Receives a dataframe with the embeddings of the column names in the dataframe and a thesaurus with embeddings 
     of terms. Returns a dataframe with the cosine similarity between the embeddings of the column names in the dataframe 
     and the embeddings of the top n terms in the thesaurus that have a cosine similarity above the set threshold'''
     
     output_embeddings_df, output_df = embedder(dataset)
 
+    
     output_embeddings_df["embedding"] = output_embeddings_df["embedding"].apply(eval)
     output_embeddings_df["embedding"] = output_embeddings_df["embedding"].apply(np.array)
 
     cessda_embeddings_df = pd.read_csv(thesaurus)
-
     cessda_embeddings_df["embedding"] = cessda_embeddings_df["embedding"].apply(eval)
     cessda_embeddings_df["embedding"] = cessda_embeddings_df["embedding"].apply(np.array)
 
@@ -220,12 +220,19 @@ def metastat(dataset, thesaurus = "thesaurus_embedding.csv", n = 3, threshold = 
 
         top_similarities = sorted_similarities[:n]
 
+        if cosineinc == False:
+            cosex = []
+            for x in top_similarities:
+                cosex.append(x)
+            top_similarities = cosex
+
         results.append(top_similarities)
 
-    output_df["top_similarities"] = results
+    output_df["enrichment_categories"] = results
 
     output_df.to_csv('output.csv', index = False)
-
+    
+    print("data written to output.csv ")
 
 #print(retrieve_metadata("Existing_own_homes__index_Netherlands_09012025_154126.csv"))
 
