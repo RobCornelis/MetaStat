@@ -135,8 +135,10 @@ def retrieve_metadata(file_path):
 
     input_name = input("What is the dataset called? ")
     input_URL = input("What is the dataset URL? ")
-    description = LLMconnect(column_names)
-
+    if input("Do you want to use LLM to generate a description of the dataset? (LLM/Manual) ") == "LLM":
+        description = LLMconnect(column_names)
+    else:
+        description = input("Please provide a description of the dataset: ")
 
     output_data = {
     "title": input_name,
@@ -179,24 +181,23 @@ def embedder(file):
 
     return output_embedding_df, output_df
 
-def metastat(dataset, thesaurus, n = 3, threshold = 0.25):
+def metastat(dataset, thesaurus = "thesaurus_embedding.csv", n = 3, threshold = 0.25):
     '''Receives a dataframe with the embeddings of the column names in the dataframe and a thesaurus with embeddings 
     of terms. Returns a dataframe with the cosine similarity between the embeddings of the column names in the dataframe 
     and the embeddings of the top n terms in the thesaurus that have a cosine similarity above the set threshold'''
     
     output_embeddings_df, output_df = embedder(dataset)
-    if type(output_embeddings_df["embedding"]) != str:
-       print(output_embeddings_df["embedding"])
+
     output_embeddings_df["embedding"] = output_embeddings_df["embedding"].apply(eval)
     output_embeddings_df["embedding"] = output_embeddings_df["embedding"].apply(np.array)
 
     cessda_embeddings_df = pd.read_csv(thesaurus)
+
     cessda_embeddings_df["embedding"] = cessda_embeddings_df["embedding"].apply(eval)
     cessda_embeddings_df["embedding"] = cessda_embeddings_df["embedding"].apply(np.array)
 
     results = []
     for _, output_row in output_embeddings_df.iterrows():
-        output_term = output_row["term"]
         output_embedding = output_row["embedding"]
         
         temp = [] 
@@ -219,14 +220,13 @@ def metastat(dataset, thesaurus, n = 3, threshold = 0.25):
 
         top_similarities = sorted_similarities[:n]
 
-        dictionary = {output_term : top_similarities}
+        results.append(top_similarities)
+
+    output_df["top_similarities"] = results
+
+    output_df.to_csv('output.csv', index = False)
 
 
+#print(retrieve_metadata("Existing_own_homes__index_Netherlands_09012025_154126.csv"))
 
-        results.append(dictionary)
-
-        
-
-
-
-metastat("data/Existing_own_homes__index_Netherlands_09012025_154126.csv", "data/cessda_embedding.csv", n = 3, threshold = 0.25)
+metastat("toy/Existing_own_homes__index_Netherlands_09012025_154126.csv", "toy/cessda_embedding.csv", n = 3, threshold = 0.25)
