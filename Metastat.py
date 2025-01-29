@@ -5,7 +5,7 @@ from groq import Groq
 from sklearn.metrics.pairwise import cosine_similarity
 from collections import Counter
 
-def LLMconnect(column_headers):
+def LLMconnect(column_headers, input_name = "X"):
     """Takes a list of column headers as input and returns a description of the dataset based on the column headers"""
 
     groq_api_key = "YOUR_API_KEY"
@@ -15,7 +15,7 @@ def LLMconnect(column_headers):
     model = "llama3-8b-8192"
 
     llm_content = f"""
-    Given the following column headers of dataset X, suggest a description for that same dataset.
+    Given the following column headers of dataset "{input_name}", suggest a description for that same dataset.
     Return only the description, no other text.
 
     ** COLUMN HEADERS **
@@ -136,7 +136,7 @@ def retrieve_metadata(file_path):
     input_name = input("What is the dataset called? ")
     input_URL = input("What is the dataset URL? ")
     if input("Do you want to use LLM to generate a description of the dataset? (LLM/Manual) ") == "LLM":
-        description = LLMconnect(column_names)
+        description = LLMconnect(column_names, input_name)
     else:
         description = input("Please provide a description of the dataset: ")
 
