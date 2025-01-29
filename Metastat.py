@@ -8,7 +8,7 @@ from collections import Counter
 def LLMconnect(column_headers):
     """Takes a list of column headers as input and returns a description of the dataset based on the column headers"""
 
-    groq_api_key = "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"
+    groq_api_key = "YOUR_API_KEY"
 
     client = Groq(api_key=groq_api_key)
 
@@ -133,8 +133,8 @@ def retrieve_metadata(file_path):
 
 
 
-    input_name = input("What is the dataset called?")
-    input_URL = input("At what URL is the dataset located")
+    input_name = input("What is the dataset called? ")
+    input_URL = input("What is the dataset URL? ")
     description = LLMconnect(column_names)
 
 
@@ -177,14 +177,14 @@ def embedder(file):
     output_embedding_df = pd.DataFrame(output_embedding_list)
     #output_embedding_df.to_csv('output_embedding.csv', index=False)
 
-    return output_embedding_df
+    return output_embedding_df, output_df
 
 def metastat(dataset, thesaurus, n = 3, threshold = 0.25):
     '''Receives a dataframe with the embeddings of the column names in the dataframe and a thesaurus with embeddings 
     of terms. Returns a dataframe with the cosine similarity between the embeddings of the column names in the dataframe 
     and the embeddings of the top n terms in the thesaurus that have a cosine similarity above the set threshold'''
     
-    output_embeddings_df = embedder(dataset)
+    output_embeddings_df, output_df = embedder(dataset)
     if type(output_embeddings_df["embedding"]) != str:
        print(output_embeddings_df["embedding"])
     output_embeddings_df["embedding"] = output_embeddings_df["embedding"].apply(eval)
@@ -224,6 +224,8 @@ def metastat(dataset, thesaurus, n = 3, threshold = 0.25):
 
 
         results.append(dictionary)
+
+        
 
 
 
