@@ -23,7 +23,7 @@ In it's current state, the code will return:
   - column_medians
   - column_sd
 
-Future work:
+## Future work:
 - Move the LLM description generation further down the pipeline.
   - By moving the LLM description generation after the embedding- and association calculation process, the LLM will be able to generate a description that is more connected to the user's wishes, as it will by proxy make use of the thesaurus specified by the user.
 - Make the embedder context aware.
