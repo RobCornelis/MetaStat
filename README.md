@@ -25,7 +25,7 @@ In it's current state, the code will return:
   - column_sd
 
 ## Current Focus
-- Due to the nature of Statline's file system, it's double header row is currently not read well by Pandas, resulting in a false report by dtypes defaulting to describing every column as 'object'. ~~This results in further calculations not being processed and returned as blank.Z~ This is currently solved by ignoring the second header row, however this approach omits data and a different solution is therefore preferable.
+- Due to the nature of Statline's file system, it's double header row is currently not read well by Pandas, resulting in a false report by dtypes defaulting to describing every column as 'object'. ~~This results in further calculations not being processed and returned as blank.~~ This is currently solved by ignoring the second header row, however this approach omits data and a different solution is therefore preferable.
 
 ## Future work:
 - Move the LLM description generation further down the pipeline.
