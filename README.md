@@ -5,7 +5,7 @@ This is done through a largely automated script, with limited user input and wit
 
 The goal is to create an automated but versatile script, which can be ran on any different dataset from Statline.
 
-In it's current state, the code will return:
+In it's current state, the code will return a .csv file consisting of:
 - A user defined amount of associated themes per column.
   - Themes are defined within a thesaurus given by the user (Standard is CESSDA ELSST Thesaurus).
   - Association is calculated through embedding (Standard by use of all-MiniLM)
