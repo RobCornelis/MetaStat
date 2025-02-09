@@ -1,4 +1,5 @@
 # MetaStat
+### Description
 Metastat is a proof of concept to explore automated metadata creation for (confidential) CBS Statline datasets. 
 This is done through a largely automated script, with limited user input and without the need for the user to access the data directly or open the file. 
 
@@ -23,8 +24,13 @@ In it's current state, the code will return:
   - column_medians
   - column_sd
 
+## Current Focus
+- Due to the nature of Statline's file system, it's double header row is currently not read well by Pandas, resulting in a false report by dtypes defaulting to describing every column as 'object'. This results in further calculations not being processed and returned as blank.
+
 ## Future work:
 - Move the LLM description generation further down the pipeline.
   - By moving the LLM description generation after the embedding- and association calculation process, the LLM will be able to generate a description that is more connected to the user's wishes, as it will by proxy make use of the thesaurus specified by the user.
 - Make the embedder context aware.
   - In it's current state, the embedding model loops over the individual column headers, only returning the association of a specific header instead of taking into account the embedding of the additional headers in the dataset. We aim to implement this.
+- Diversify the output format, adding option for .json output
+- Adding rdf support for integration into linked data networks 
